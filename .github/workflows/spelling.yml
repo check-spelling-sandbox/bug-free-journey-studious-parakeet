@@ -126,15 +126,15 @@ jobs:
               "": []
             }
 
-  comment-push:
+  comment-push-latest:
     name: Report (Push)
     # If your workflow isn't running on push, you can remove this job
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     needs: spelling
     permissions:
       actions: read
       contents: write
-    if: (success() || failure()) && needs.spelling.outputs.followup && github.event_name == 'push'
+    if: (success() || failure()) && needs.spelling.outputs.followup
     steps:
       - name: comment
         uses: check-spelling-sandbox/check-spelling@prerelease
@@ -143,7 +143,7 @@ jobs:
           spell_check_this: check-spelling/spell-check-this@prerelease
           task: ${{ needs.spelling.outputs.followup }}
 
-  comment-pr:
+  comment-push-slim:
     name: Report (PR)
     # If you workflow isn't running on pull_request*, you can remove this job
     runs-on: ubuntu-slim
@@ -152,7 +152,7 @@ jobs:
       actions: read
       contents: read
       pull-requests: write
-    if: (success() || failure()) && needs.spelling.outputs.followup && contains(github.event_name, 'pull_request')
+    if: (success() || failure()) && needs.spelling.outputs.followup
     steps:
       - name: comment
         uses: check-spelling-sandbox/check-spelling@prerelease
